@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>APIcast testing tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+
+<body>
+
+    <div id="global-content">
+        <h1 class=title>APIcast testing tool</h1>
+
+        <div class="configuration-box">
+            <div>
+                <form class="horizontal-form" id="a-container-config" action="/data" method="post">
+
+                    <div class="config-block">
+
+                        <p class="form-row">
+                            <label class="table-cell" for="images">APIcast Image: </label>
+                            <input list="images" name="a_image" />
+                            <datalist id="images">
+                                {% for image in a_images %}
+                                <option value="{{ image['value'] }}">{{ image['name'] }}</option>
+                                {% endfor %}
+                            </datalist>
+                            <!--<input class="table-cell" type="text" id="a_image" name="a_image" value="{{a_image}}"><br>-->
+                        </p>
+                        <p class="form-row">
+                            <label class="table-cell" for="portal_endpoint">APIcast configuration: </label>
+                            <input class="table-cell" type="text" id="portal_endpoint" name="portal_endpoint"
+                                placeholder="Portal endpoint / local file" value="config.json"><br>
+                        </p>
+                        <p class="form-row">
+                            <label class="table-cell" for="mock_auth">Mock authorization: </label>
+                            <input class="table-cell" type="checkbox" id="mock_auth" name="mock_auth"><br>
+                        </p>
+                        <p class="form-row">
+                            <label class="table-cell" for="backend_endpoint">Backend Endpoint: </label>
+                            <input class="table-cell" type="text" id="backend_endpoint" name="backend_endpoint"
+                                value=""><br>
+                        </p><br>
+                    </div>
+
+                    <div class="config-block multi-add-table">
+                        Environment Variables
+                        <div class="form-row">
+                            <div id="environment-variables">
+                                <input class='table-cell' type='text' id='env_name_0' name='env_name_0'
+                                    placeholder='Name'></input>=
+                                <input class='table-cell' type='text' id='env_value_0' name='env_value_0'
+                                    placeholder='Value'></input><br>
+                            </div>
+                        </div>
+                        <input type="hidden" value="0" id="total_envs">
+                        <button class="add" type="button" onclick="addEnvVarFields()">+</button>
+                    </div>
+
+                    <div class="config-block multi-add-table">
+                        Ports
+                        <div class="form-row">
+                            <div id="ports">
+                                <input class='table-cell' type='text' id='port_c_0' name='port_c_0'
+                                    placeholder='Container port' value=8080></input>:
+                                <input class='table-cell' type='text' id='port_h_0' name='port_h_0'
+                                    placeholder='Host port'></input><br>
+                            </div>
+                        </div>
+                        <input type="hidden" value="0" id="total_ports">
+                        <button class="add" type="button" onclick="addPortsFields()">+</button>
+                    </div>
+
+                    <div class="config-block multi-add-table">
+                        Custom file mounts
+                        <div class="form-row">
+                            <div id="file-mounts">
+                                <textarea rows="12" cols="50" class='table-cell' type='text' id='file_content_0' name='file_content_0'
+                                    placeholder='Paste file content here'></textarea>->
+                                <input class='table-cell' type='text' id='file_mount_0' name='file_mount_0'
+                                    placeholder='Mount point'></input><br>
+                            </div>
+                        </div>
+                        <input type="hidden" value="0" id="total_files">
+                        <button class="add" type="button" onclick="addFileFields()">+</button>
+                    </div>
+
+                </form>
+                <input form="a-container-config" id="submit-configuration-button" type="submit" value="Start APIcast"
+                    name="button_submit">
+                <input form="a-container-config" type="reset" value="Reset" name="button_reset">
+            </div>
+        </div>
+
+    </div>
+
+    <h2>Running containers</h2>
+    <ul>
+        {% for k in running_containers %}
+
+        <li class=container-box>
+            <div>
+                Name: {{running_containers[k].name}}<br>
+                Image: {{running_containers[k].image.tags[0]}}<br>
+                <br>Mounts:<br>
+                {% for m in running_containers[k].attrs.Mounts %}
+                 Source: {{m.Source}}<br>
+                 Destination: {{m.Destination}}<br>
+                {% endfor %}
+                <br>Environment variables:<br>
+                {% for e in running_containers[k].attrs.Config.Env %}
+                 {{e}}<br>
+                {% endfor %}
+                <br>Ports:<br>
+                {% for p in running_containers[k].ports %}
+                 {% for container_port in running_containers[k].ports[p] %}
+                 {{ p }} : {{ container_port }}<br>
+                 {% endfor %}
+                {% endfor %}
+            </div>
+            <br>
+            <form class="horizontal-form" id="a-container-config" action="/data" method="post">
+                <input hidden type="text" id="id" name="id" value="{{running_containers[k].id}}">
+                <input type="submit" name="kill" value="kill"></button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div id=footer>
+        Version: {{ version }}
+    </div>
+</body>
+
+</html>

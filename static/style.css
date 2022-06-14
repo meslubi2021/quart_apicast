@@ -1,0 +1,87 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: lightblue;
+}
+
+.title {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align:center;
+}
+
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 10px;
+}
+
+#global-content {
+    flex-direction: column;
+}
+
+#footer {
+    position: fixed;
+    line-height: 1;
+    bottom: 0;
+    width: 100%;
+    font-size: 15px;
+    font-family: sans-serif;
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-end;
+    margin-bottom: 5px;
+}
+
+.configuration-box {
+    height: 300px;
+    margin: 10px;
+    border: 1px solid;
+    display: flex;
+    flex-direction: row;
+}
+
+#submit-configuration-button {
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-end;
+    float: right;
+}
+
+form {
+    display: table;
+}
+
+.form-row {
+    display: table-row;
+}
+
+.table-cell {
+    display: table-cell;
+}
+
+.horizontal-form {
+    display: flex;
+    flex-direction: row;
+}
+
+.config-block {
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.multi-add-table {
+    height: 250px;
+    margin: 5px;
+    border: 1px solid;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.container-box {
+    border: 1px solid;
+    padding: 10px;
+}
+
+input[type=submit] {
+    width: 7em;  
+    height: 2em;
+}
