@@ -100,7 +100,6 @@ async def start_apicast(apicast_configuration):
     image = apicast_configuration.get('a_image')
     # add default env vars here, then merge with env_vars
     env_vars = {}
-    env_vars["THREESCALE_CONFIG_FILE"] = "/tmp/configuration/config.json"
     env_vars["THREESCALE_DEPLOYMENT_ENV"] = "staging"
     env_vars["APICAST_LOG_LEVEL"] = "debug"
 
